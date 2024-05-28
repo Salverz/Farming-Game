@@ -18,6 +18,7 @@ namespace Farming
             Zoom = 1f;
         }
 
+        // Zoom centered on the mouse's position
         public void ZoomCentered(float zoomAmount, Vector2 screenCenter)
         {
             Vector2 beforeZoomWorldPosition = ScreenToWorld(screenCenter);

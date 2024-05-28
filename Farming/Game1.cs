@@ -1,12 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Farming
 {
     public class Game1 : Game
     {
         Texture2D backgroundTexture;
+        private TileMap _tileMap;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -26,6 +29,7 @@ namespace Farming
         {
             // TODO: Add your initialization logic here
             _camera = new Camera(GraphicsDevice.Viewport);
+            _tileMap = new TileMap();
 
             base.Initialize();
         }
@@ -33,6 +37,10 @@ namespace Farming
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Load textures
+            TextureHandler.Instance.LoadTextures(Content);
+            _tileMap.FillTileMapWithDirt();
 
             // TODO: use this.Content to load your game content here
             backgroundTexture = Content.Load<Texture2D>("Textures/Sinnoh_Route_209_DP");
@@ -44,7 +52,8 @@ namespace Farming
                 Exit();
 
             // TODO: Add your update logic here
-            InputHandler.Instance.Update(_camera, gameTime);
+            CameraInputHandler.Instance.Update(_camera, gameTime);
+            CursorHandler.Instance.Update(_camera, _tileMap);
 
             base.Update(gameTime);
         }
@@ -56,6 +65,7 @@ namespace Farming
             // TODO: Add your drawing code here
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
+            _tileMap.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);

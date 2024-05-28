@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace Farming
 {
-    internal class InputHandler
+    // Singleton
+    public class CameraInputHandler
     {
-        // Singleton instance
-        public static InputHandler _instance = null;
+        public static CameraInputHandler _instance = null;
 
         private int previousScrollWheelValue;
         private int cameraSpeed;
@@ -15,7 +15,7 @@ namespace Farming
 
         private Dictionary<string, float> directionSpeeds;
 
-        private InputHandler()
+        private CameraInputHandler()
         {
             previousScrollWheelValue = 0;
             cameraSpeed = 1000;
@@ -29,13 +29,13 @@ namespace Farming
             };
         }
 
-        public static InputHandler Instance
+        public static CameraInputHandler Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new InputHandler();
+                    _instance = new CameraInputHandler();
                 }
                 return _instance;
             }
@@ -43,6 +43,7 @@ namespace Farming
 
         public void Update(Camera camera, GameTime gameTime)
         {
+            // Handle keyboard panning
             KeyboardState keyState = Keyboard.GetState();
 
             if (keyState.IsKeyDown(Keys.W))
@@ -89,8 +90,7 @@ namespace Farming
                 camera.Position = new Vector2(camera.Position.X + directionSpeeds["right"] * (float)gameTime.ElapsedGameTime.TotalSeconds, camera.Position.Y);
             }
 
-
-
+            // Handle zoom in/out
             MouseState currentMouseState = Mouse.GetState();
             float scrollDelta = currentMouseState.ScrollWheelValue - previousScrollWheelValue;
             previousScrollWheelValue = currentMouseState.ScrollWheelValue;
