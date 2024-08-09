@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace Farming
 {
@@ -15,6 +17,7 @@ namespace Farming
         private GuiElement itemSlot9;
         private GuiElement moneyDisplay;
         private GuiElement temperatureDisplay;
+        private GuiElement potatoBuyButton;
 
         public GameGUI()
         {
@@ -90,6 +93,19 @@ namespace Farming
                 .SetTextPosition(500, 100)
                 .Build();
 
+            potatoBuyButton = new GuiElement.Builder()
+                .SetName("potatoBuyButton")
+                .SetText("Potato $12")
+                .SetScreenPosition(20, 500)
+                .SetTextPosition(100, 30)
+                .SetTexture("default", TextureHandler.Instance.GetTexture("shop_button"))
+                .IsClickable()
+                .Build();
+
+
+            Action potatoBuyButtonOnClickAction = PotatoBuyButtonOnClick;
+            potatoBuyButton.AddOnClickAction("default", potatoBuyButtonOnClickAction);
+
 
             gameGui.AddGUIElement(itemSlot1);
             gameGui.AddGUIElement(itemSlot2);
@@ -102,6 +118,12 @@ namespace Farming
             gameGui.AddGUIElement(itemSlot9);
             gameGui.AddGUIElement(moneyDisplay);
             gameGui.AddGUIElement(temperatureDisplay);
+            gameGui.AddGUIElement(potatoBuyButton);
+        }
+
+        private void PotatoBuyButtonOnClick()
+        {
+            Debug.WriteLine("Potato button clicked!");
         }
 
         public void Update()

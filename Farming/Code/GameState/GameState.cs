@@ -90,7 +90,6 @@ namespace Farming
             _totalDays++;
             SetTemperature();
             PlantManager.Instance.GrowPlants();
-            Debug.WriteLine($"Now on year {Year} day {DayInYear} ({Season})");
         }
 
         public string CurrentDayString()

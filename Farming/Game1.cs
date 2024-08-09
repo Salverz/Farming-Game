@@ -2,18 +2,21 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Farming
 {
     public class Game1 : Game
     {
-        Texture2D backgroundTexture;
         private TileMap _tileMap;
+        private SpriteFont _arial;
+        private Gui gui;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Camera _camera;
+
+        // Temporary
+        private bool dayButtonPressed;
 
         public Game1()
         {
@@ -40,20 +43,57 @@ namespace Farming
 
             // Load textures
             TextureHandler.Instance.LoadTextures(Content);
-            _tileMap.FillTileMapWithDirt();
+            // Load fonts
+            FontHandler.Instance.LoadFonts(Content);
+
+            _arial = Content.Load<SpriteFont>("Fonts/Silkscreen");
+            LoadScene();
 
             // TODO: use this.Content to load your game content here
-            backgroundTexture = Content.Load<Texture2D>("Textures/Sinnoh_Route_209_DP");
+        }
+
+        private void LoadScene()
+        {
+            new GameGUI();
+            GuiManager.Instance.EnableGui("gameGui", 1);
+            dayButtonPressed = false;
+
+            _tileMap.FillTileMapWithDirt();
         }
 
         protected override void Update(GameTime gameTime)
         {
+            // Exit game on Esc
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+
+            // Handle Camera Input
             CameraInputHandler.Instance.Update(_camera, gameTime);
-            CursorHandler.Instance.Update(_camera, _tileMap);
+            MouseInputManager.Instance.Update(_camera, _tileMap);
+
+            // TEMPORARY/TESTING - Advance day
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                if (!dayButtonPressed)
+                {
+                    dayButtonPressed = true;
+                    GameState.Instance.AdvanceDay();
+                    PlayerStats.Instance.Money -= 100;
+                }
+            } else
+            {
+                dayButtonPressed = false;
+            }
+
+            // TEMPORARY/TESTING - Decrease money
+            if (Keyboard.GetState().IsKeyDown(Keys.F12))
+            {
+                PlayerStats.Instance.Money += 100;
+            }
+
+            // Update GUIs
+            GuiManager.Instance.Update();
 
             base.Update(gameTime);
         }
@@ -62,10 +102,15 @@ namespace Farming
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
+            // Draw game
+            _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
             _tileMap.Draw(_spriteBatch);
+            _spriteBatch.End();
+
+            // Draw to UI
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.DrawString(_arial, GameState.Instance.CurrentDayString(), new Vector2(-1, -9), Color.Black);
+            GuiManager.Instance.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);

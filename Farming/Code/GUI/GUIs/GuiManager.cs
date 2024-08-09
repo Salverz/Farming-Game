@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
@@ -113,6 +114,22 @@ namespace Farming
                 }
             }
             return bottomLayer;
+        }
+
+        public GuiElement GetGuiElementAtPosition(int x, int y)
+        {
+            foreach (Gui gui in activeGuis.Keys)
+            {
+                foreach (GuiElement guiElement in gui.GuiElements)
+                {
+                    if (guiElement.ClickBoundingBox.Contains(new Point(x, y))) {
+                        Debug.WriteLine($"found Gui element: {guiElement.Name}");
+                        return guiElement;
+                    }
+                }
+            }
+            Debug.WriteLine($"Did not find gui element");
+            return null;
         }
 
         public void Update()

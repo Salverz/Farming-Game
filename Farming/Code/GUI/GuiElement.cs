@@ -10,6 +10,7 @@ namespace Farming
     public class GuiElement
     {
         private Dictionary<string, Texture2D> _textures;
+        private Dictionary<string, Action> _actions;
         private string _text;
         private string _name;
 
@@ -19,6 +20,9 @@ namespace Farming
         public bool HasTexture { get; }
         public Vector2 ScreenPosition { get; set; }
         public string SelectedTextureName { set; get; }
+        public bool IsClickable { get; set; }
+        public Rectangle ClickBoundingBox { get; set; }
+        public Dictionary<string, Action> OnClickActions { get; set; }
         public Texture2D SelectedTexture
         {
             get
@@ -61,6 +65,8 @@ namespace Farming
             private string _text;
             private Vector2 _textPosition;
             private bool _textPositionSet;
+            private bool _isClickable;
+            private Rectangle _clickBoundingBox;
 
             public Builder()
             {
@@ -71,6 +77,7 @@ namespace Farming
                 _textPositionSet = false;
                 _textures = new Dictionary<string, Texture2D>();
                 _defaultTextureName = "";
+                _isClickable = false;
             }
 
             public Builder SetName(string name)
@@ -124,6 +131,12 @@ namespace Farming
 
             }
 
+            public Builder IsClickable()
+            {
+                _isClickable = true;
+                return this;
+            }
+
             public GuiElement Build()
             {
                 if (_name == "")
@@ -166,6 +179,20 @@ namespace Farming
                         );
                 }
 
+                // Create the bounding box for the element
+                if (_hasTexture)
+                {
+                    _clickBoundingBox = new Rectangle(
+                        (int)_screenPosition.X,
+                        (int)_screenPosition.Y,
+                        _textures[_defaultTextureName].Width * 6, // Gui Textures are scaled up 6x to be 320x180
+                        _textures[_defaultTextureName].Height * 6
+                        );
+                    Debug.WriteLine($"{_name} has bounding box from {_clickBoundingBox.Left} to {_clickBoundingBox.Right} X and {_clickBoundingBox.Top} to {_clickBoundingBox.Bottom} Y");
+                }
+
+                // Set the on-click action if the element is clickable
+
                 return new GuiElement
                     (
                         _name,
@@ -176,7 +203,9 @@ namespace Farming
                         _hasTexture,
                         _text,
                         _textPosition,
-                        _textColor
+                        _textColor,
+                        _isClickable,
+                        _clickBoundingBox
                     );
             }
         }
@@ -191,7 +220,9 @@ namespace Farming
                 bool hasTexture,
                 string text,
                 Vector2 textPosition,
-                Color textColor
+                Color textColor,
+                bool isClickable,
+                Rectangle clickBoundingBox
             )
         {
             _name = name;
@@ -203,6 +234,8 @@ namespace Farming
             _text = text;
             _textPosition = textPosition;
             TextColor = textColor;
+            IsClickable = isClickable;
+            ClickBoundingBox = clickBoundingBox;
         }
 
         public void SetTextPosition(int x, int y)
@@ -225,11 +258,36 @@ namespace Farming
             TextColor = color;
         }
 
+        public void AddOnClickAction(string name, Action action)
+        {
+            if (!IsClickable)
+            {
+                throw new InvalidOperationException($"Cannot add an on-click action to a non-clickable GuiElement ({Name})");
+            }
+
+            if (_actions == null)
+            {
+                _actions = new Dictionary<string, Action>();
+            }
+            _actions.Add(name, action);
+        }
+
+        public bool ElementClicked()
+        {
+            if (!IsClickable)
+            {
+                return false;
+            }
+
+            _actions[SelectedTextureName]();
+            return true;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (HasTexture)
             {
-                spriteBatch.Draw(_textures[SelectedTextureName], ScreenPosition, null, Color.White, 0f, Vector2.Zero, 6f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(_textures[SelectedTextureName], ScreenPosition, null, Color.White, 0f, Vector2.Zero, 6f, SpriteEffects.None, 0f); // Gui Textures are scaled up 6x to be 320x180
                 // spriteBatch.Draw(_textures[SelectedTextureName], ScreenPosition, Color.White);
             }
             if (HasText)

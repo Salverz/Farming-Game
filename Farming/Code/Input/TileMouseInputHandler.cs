@@ -1,32 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 
 namespace Farming
 {
     // Singleton
-    public class CursorHandler
+    public class TileMouseInputHandler
     {
-        private static CursorHandler _instance = null;
+        private static TileMouseInputHandler _instance = null;
         private bool _isLeftMouseButtonHeld;
         private Tile _currentHoveredTile;
         private int _currentHoveredTileRow;
         private int _currentHoveredTileCol;
 
-        public static CursorHandler Instance
+        public static TileMouseInputHandler Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new CursorHandler();
+                    _instance = new TileMouseInputHandler();
                 }
                 return _instance;
             }
         }
 
-        private CursorHandler()
+        private TileMouseInputHandler()
         {
             _isLeftMouseButtonHeld = false;
             _currentHoveredTile = null;
@@ -74,7 +73,7 @@ namespace Farming
             _currentHoveredTileCol = -1;
         }
 
-        public void Update(Camera camera, TileMap tileMap)
+        public void HandleTileSelection(Camera camera, TileMap tileMap)
         {
             GetCurrentHoveredTile(camera, tileMap);
 

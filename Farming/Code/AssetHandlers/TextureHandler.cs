@@ -47,6 +47,7 @@ namespace Farming
             // Buttons
             _textures["next_day_button"] = content.Load<Texture2D>("Textures/UI/Buttons/next_day_button");
             _textures["ui_slot"] = content.Load<Texture2D>("Textures/UI/ui_slot");
+            _textures["shop_button"] = content.Load<Texture2D>("Textures/UI/shop_button");
         }
         
         private void LoadTileTextures(ContentManager content)
