@@ -28,7 +28,7 @@ namespace Farming
                 return;
             }
             
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            if (InputTools.Instance.CheckForSingleMousePress(mouseState.LeftButton))
             {
                 mouseTarget.ElementClicked();
             }

@@ -123,12 +123,12 @@ namespace Farming
                 foreach (GuiElement guiElement in gui.GuiElements)
                 {
                     if (guiElement.ClickBoundingBox.Contains(new Point(x, y))) {
-                        Debug.WriteLine($"found Gui element: {guiElement.Name}");
+                        // Debug.WriteLine($"found Gui element: {guiElement.Name}");
                         return guiElement;
                     }
                 }
             }
-            Debug.WriteLine($"Did not find gui element");
+            // Debug.WriteLine($"Did not find gui element");
             return null;
         }
 

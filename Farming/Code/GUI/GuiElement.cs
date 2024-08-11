@@ -247,7 +247,7 @@ namespace Farming
         {
             if (!HasText)
             {
-                throw new InvalidOperationException($"Cannot change text of GuiElement ({_name} does not have any text)");
+                throw new InvalidOperationException($"Cannot change text of GuiElement ({Name} does not have any text)");
             }
             
             Text = newText;
