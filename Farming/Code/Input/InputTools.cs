@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Farming
 {
@@ -19,28 +19,27 @@ namespace Farming
             }
         }
 
-        private List<ButtonState> _pressedMouseButtons;
+        private bool leftMouseClicked;
 
         private InputTools()
         {
-            _pressedMouseButtons = new List<ButtonState>();
+            leftMouseClicked = false;
         }
 
-        public bool CheckForSingleMousePress(ButtonState mouseButton)
+        // Return true if the mouse button has been pressed and then released, otherwise return false
+        public bool ActivateOnMouseRelease(ButtonState mouseButton)
         {
-
-            if (mouseButton == ButtonState.Pressed)
+            if (leftMouseClicked && mouseButton == ButtonState.Released)
             {
-                if (_pressedMouseButtons.Contains(mouseButton))
-                {
-                    return false;
-                }
-                _pressedMouseButtons.Add(mouseButton);
+                leftMouseClicked = false;
                 return true;
             }
-
-            _pressedMouseButtons.Remove(mouseButton);
+            else if (mouseButton == ButtonState.Pressed)
+            {
+                leftMouseClicked = true;
+            }
             return false;
         }
+
     }
 }

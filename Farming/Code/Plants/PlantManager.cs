@@ -18,21 +18,27 @@ namespace Farming
             }
         }
 
-        private List<Plant> _plants;
+        private List<Plant> _placedPlants;
+        private Dictionary<string, Plant> _plantTypes;
 
         private PlantManager()
         {
-            _plants = new List<Plant>();
+            _placedPlants = new List<Plant>();
         }
 
-        public void AddPlant(Plant plant)
+        public void RegisterPlant(string name, Plant plant)
         {
-            _plants.Add(plant);
+            _plantTypes.Add(name, plant);
+        }
+
+        public void AddPlacedPlant(Plant plant)
+        {
+            _placedPlants.Add(plant);
         }
 
         public void GrowPlants()
         {
-            foreach (Plant plant in _plants)
+            foreach (Plant plant in _placedPlants)
             {
                 plant.Grow();
             }

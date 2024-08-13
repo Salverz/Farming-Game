@@ -87,34 +87,16 @@ namespace Farming
                 return;
             }
 
-            if (IsLeftMouseButtonPressed)
+            MouseState mouseState = Mouse.GetState();
+            if (!InputTools.Instance.ActivateOnMouseRelease(mouseState.LeftButton))
             {
-                if (_isLeftMouseButtonHeld)
-                {
-                    return;
-                }
-                _isLeftMouseButtonHeld = true;
-            } 
-            else
-            {
-                _isLeftMouseButtonHeld = false;
                 return;
             }
 
             if (_currentHoveredTile is SelectableTile && ((SelectableTile)_currentHoveredTile).Plant == null)
             {
 
-                PlayerStats.Instance.Money -= 10;
-
-                ((SelectableTile)_currentHoveredTile).Plant = new Wheat
-                    (
-                        50,
-                        90,
-                        60,
-                        80,
-                        7,
-                        50
-                    );
+                ((SelectableTile)_currentHoveredTile).Plant = PlantFactory.Instance.CreatePlant(GameGui.Instance.GetSelectedPlant());
             }
             else if (((SelectableTile)_currentHoveredTile).Plant.IsFullyGrown())
             {

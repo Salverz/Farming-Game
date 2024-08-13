@@ -36,20 +36,20 @@ namespace Farming
             // Tiles
             LoadTileTextures(content);
 
-            LoadGUITextures(content);
+            LoadGuiTextures(content);
 
             Debug.WriteLine("Textures loaded!");
             Debug.WriteLine(_textures.ToString());
         }
 
-        private void LoadGUITextures(ContentManager content)
+        private void LoadGuiTextures(ContentManager content)
         {
             // Buttons
             _textures["next_day_button"] = content.Load<Texture2D>("Textures/UI/Buttons/next_day_button");
             _textures["ui_slot"] = content.Load<Texture2D>("Textures/UI/ui_slot");
             _textures["shop_button"] = content.Load<Texture2D>("Textures/UI/shop_button");
         }
-        
+
         private void LoadTileTextures(ContentManager content)
         {
             _textures["tile_selector"] = content.Load<Texture2D>("Textures/Tiles/tile_selector16");
@@ -66,7 +66,7 @@ namespace Farming
             _textures["wheat_stage6"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage6");
             _textures["wheat_stage7"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage7");
             _textures["potato_plant_stage1"] = content.Load<Texture2D>("Textures/Plants/Potato/potato_plant_stage1");
-        }    
+        }
 
         public Texture2D GetTexture(string name)
         {

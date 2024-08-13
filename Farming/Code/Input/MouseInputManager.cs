@@ -8,7 +8,9 @@ namespace Farming
     public class MouseInputManager
     {
         private static MouseInputManager _instance = null;
-        public static MouseInputManager Instance { get
+        public static MouseInputManager Instance
+        {
+            get
             {
                 if (_instance == null)
                 {
@@ -27,8 +29,8 @@ namespace Farming
                 TileMouseInputHandler.Instance.HandleTileSelection(camera, tileMap);
                 return;
             }
-            
-            if (InputTools.Instance.CheckForSingleMousePress(mouseState.LeftButton))
+
+            if (InputTools.Instance.ActivateOnMouseRelease(mouseState.LeftButton))
             {
                 mouseTarget.ElementClicked();
             }

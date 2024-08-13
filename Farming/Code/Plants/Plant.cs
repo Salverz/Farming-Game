@@ -30,7 +30,7 @@ namespace Farming
             _harvestedTimes = 0;
             _cropQuality = 1f;
 
-            PlantManager.Instance.AddPlant(this);
+            PlantManager.Instance.AddPlacedPlant(this);
         }
 
         public bool IsFullyGrown()

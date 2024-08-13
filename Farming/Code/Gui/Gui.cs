@@ -26,7 +26,7 @@ namespace Farming
             GuiManager.Instance.AddGui(this);
         }
 
-        public void AddGUIElement(GuiElement element)
+        public void AddGuiElement(GuiElement element)
         {
             foreach (GuiElement guiElement in _guiElements)
             {

@@ -54,7 +54,7 @@ namespace Farming
 
         private void LoadScene()
         {
-            new GameGUI();
+            new GameGui();
             GuiManager.Instance.EnableGui("gameGui", 1);
             dayButtonPressed = false;
 
@@ -81,7 +81,8 @@ namespace Farming
                     GameState.Instance.AdvanceDay();
                     PlayerStats.Instance.Money -= 100;
                 }
-            } else
+            }
+            else
             {
                 dayButtonPressed = false;
             }
@@ -92,7 +93,7 @@ namespace Farming
                 PlayerStats.Instance.Money += 100;
             }
 
-            // Update GUIs
+            // Update Guis
             GuiManager.Instance.Update();
 
             base.Update(gameTime);
