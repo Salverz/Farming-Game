@@ -19,7 +19,7 @@ namespace Farming
 
         public Plant CreatePlant(string name)
         {
-            if (name == "inventoryWheatSeed")
+            if (name == "wheatSeed")
             {
                 return new Wheat
                     (

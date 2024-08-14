@@ -96,7 +96,10 @@ namespace Farming
             if (_currentHoveredTile is SelectableTile && ((SelectableTile)_currentHoveredTile).Plant == null)
             {
 
-                ((SelectableTile)_currentHoveredTile).Plant = PlantFactory.Instance.CreatePlant(GameGui.Instance.GetSelectedPlant());
+                if (PlayerStats.Instance.RemoveFromInventory(GameGui.Instance.GetSelectedPlant(), 1))
+                {
+                    ((SelectableTile)_currentHoveredTile).Plant = PlantFactory.Instance.CreatePlant(GameGui.Instance.GetSelectedPlant());
+                }
             }
             else if (((SelectableTile)_currentHoveredTile).Plant.IsFullyGrown())
             {

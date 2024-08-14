@@ -249,7 +249,7 @@ namespace Farming
             {
                 throw new InvalidOperationException($"Cannot change text of GuiElement ({Name} does not have any text)");
             }
-            
+
             Text = newText;
         }
 

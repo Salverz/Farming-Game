@@ -16,6 +16,7 @@ namespace Farming
         }
 
         private string _selectedInventoryItem;
+        private string _selectedInventorySlot;
         private List<GuiElement> _inventorySlots;
 
         private GuiElement itemSlot1;
@@ -29,10 +30,10 @@ namespace Farming
         private GuiElement itemSlot9;
         private GuiElement moneyDisplay;
         private GuiElement temperatureDisplay;
-        private GuiElement potatoBuyButton;
-        private GuiElement inventoryPotato;
-        private GuiElement wheatBuyButton;
-        private GuiElement inventoryWheat;
+        private GuiElement potatoSeedBuyButton;
+        private GuiElement inventoryPotatoSeed;
+        private GuiElement wheatSeedBuyButton;
+        private GuiElement inventoryWheatSeed;
 
         public GameGui()
         {
@@ -40,6 +41,7 @@ namespace Farming
             GuiManager.Instance.RegisterGuiBuilder(this);
             _instance = this;
             _selectedInventoryItem = "";
+            _selectedInventorySlot = "";
             _inventorySlots = new List<GuiElement>();
 
             itemSlot1 = new GuiElement.Builder()
@@ -63,7 +65,7 @@ namespace Farming
                 .SetTextPosition(500, 100)
                 .Build();
 
-            potatoBuyButton = new GuiElement.Builder()
+            potatoSeedBuyButton = new GuiElement.Builder()
                 .SetName("potatoBuyButton")
                 .SetText("Potato $12")
                 .SetScreenPosition(20, 500)
@@ -71,10 +73,10 @@ namespace Farming
                 .SetTexture("default", TextureHandler.Instance.GetTexture("shop_button"))
                 .IsClickable()
                 .Build();
-            Action potatoBuyButtonOnClickAction = PotatoBuyButtonOnClick;
-            potatoBuyButton.AddOnClickAction("default", potatoBuyButtonOnClickAction);
+            Action potatoBuyButtonOnClickAction = delegate () { HandleBuyItem(new List<Object> { "potatoSeed", 12, 1 }); };
+            potatoSeedBuyButton.AddOnClickAction("default", potatoBuyButtonOnClickAction);
 
-            inventoryPotato = new GuiElement.Builder()
+            inventoryPotatoSeed = new GuiElement.Builder()
                 .SetName("inventoryPotatoSeed")
                 .SetText("Potato starts: 0")
                 .SetScreenPosition(500, 100)
@@ -82,10 +84,10 @@ namespace Farming
                 .SetTexture("default", TextureHandler.Instance.GetTexture("ui_slot"))
                 .IsClickable()
                 .Build();
-            Action selectPotatoSeed = PotatoSeedButtonOnClick;
-            inventoryPotato.AddOnClickAction("default", selectPotatoSeed);
+            Action selectPotatoSeed = delegate () { HandleSelectInventoryItem(new List<Object> { "inventoryPotatoSeed", "potatoSeed" }); };
+            inventoryPotatoSeed.AddOnClickAction("default", selectPotatoSeed);
 
-            wheatBuyButton = new GuiElement.Builder()
+            wheatSeedBuyButton = new GuiElement.Builder()
                 .SetName("wheatBuyButton")
                 .SetText("Wheat $3")
                 .SetScreenPosition(20, 700)
@@ -93,10 +95,10 @@ namespace Farming
                 .SetTexture("default", TextureHandler.Instance.GetTexture("shop_button"))
                 .IsClickable()
                 .Build();
-            Action wheatBuyButtonOnClickAction = WheatBuyButtonOnClick;
-            wheatBuyButton.AddOnClickAction("default", wheatBuyButtonOnClickAction);
+            Action wheatBuyButtonOnClickAction = delegate () { HandleBuyItem(new List<Object> { "wheatSeed", 3, 1 }); };
+            wheatSeedBuyButton.AddOnClickAction("default", wheatBuyButtonOnClickAction);
 
-            inventoryWheat = new GuiElement.Builder()
+            inventoryWheatSeed = new GuiElement.Builder()
                 .SetName("inventoryWheatSeed")
                 .SetText("Wheat seeds: 0")
                 .SetScreenPosition(500, 300)
@@ -104,20 +106,20 @@ namespace Farming
                 .SetTexture("default", TextureHandler.Instance.GetTexture("ui_slot"))
                 .IsClickable()
                 .Build();
-            Action selectWheatSeed = WheatSeedButtonOnClick;
-            inventoryWheat.AddOnClickAction("default", selectWheatSeed);
+            Action selectWheatSeed = delegate () { HandleSelectInventoryItem(new List<Object> { "inventoryWheatSeed", "wheatSeed" }); };
+            inventoryWheatSeed.AddOnClickAction("default", selectWheatSeed);
 
             // Add all inventory slots to the list of inventories
-            _inventorySlots.Add(inventoryPotato);
-            _inventorySlots.Add(inventoryWheat);
+            _inventorySlots.Add(inventoryPotatoSeed);
+            _inventorySlots.Add(inventoryWheatSeed);
 
             // Add each GuiElement to the Gui
             gameGui.AddGuiElement(moneyDisplay);
             gameGui.AddGuiElement(temperatureDisplay);
-            gameGui.AddGuiElement(potatoBuyButton);
-            gameGui.AddGuiElement(inventoryPotato);
-            gameGui.AddGuiElement(wheatBuyButton);
-            gameGui.AddGuiElement(inventoryWheat);
+            gameGui.AddGuiElement(potatoSeedBuyButton);
+            gameGui.AddGuiElement(inventoryPotatoSeed);
+            gameGui.AddGuiElement(wheatSeedBuyButton);
+            gameGui.AddGuiElement(inventoryWheatSeed);
         }
 
         // Public methods
@@ -128,33 +130,23 @@ namespace Farming
         }
 
         // On-click methods
-        // Potato
-        private void PotatoBuyButtonOnClick()
+        // Parameters should be: string item, int costEach, int quantity
+        private void HandleBuyItem(List<Object> parameters)
         {
-            BuyItem("potato seed", 12, 1);
-        }
-
-        private void PotatoSeedButtonOnClick()
-        {
-            _selectedInventoryItem = "inventoryPotatoSeed";
-        }
-
-        // Wheat
-        private void WheatBuyButtonOnClick()
-        {
-            BuyItem("wheat seed", 3, 1);
-        }
-
-        private void WheatSeedButtonOnClick()
-        {
-            _selectedInventoryItem = "inventoryWheatSeed";
-            Console.WriteLine($"set selection to {_selectedInventoryItem}");
-        }
-
-        private void BuyItem(string item, int costEach, int quantity)
-        {
+            string item = (string)parameters[0];
+            int costEach = (int)parameters[1];
+            int quantity = (int)parameters[2];
             PlayerStats.Instance.Money -= costEach * quantity;
             PlayerStats.Instance.AddToInventory(item, quantity);
+        }
+
+        // Parameters should be: string inventorySlot, string item
+        private void HandleSelectInventoryItem(List<Object> parameters)
+        {
+            string inventorySlot = (string)parameters[0];
+            string item = (string)parameters[1];
+            _selectedInventorySlot = inventorySlot;
+            _selectedInventoryItem = item;
         }
 
         public void Update()
@@ -165,7 +157,7 @@ namespace Farming
             // Set the color of the selected inventory slot to blue
             foreach (GuiElement inventorySlot in _inventorySlots)
             {
-                if (_selectedInventoryItem == inventorySlot.Name)
+                if (_selectedInventorySlot == inventorySlot.Name)
                 {
                     inventorySlot.SetColor(Color.Blue);
                 }
@@ -175,8 +167,8 @@ namespace Farming
                 }
             }
 
-            inventoryPotato.SetText($"Potato starts: {PlayerStats.Instance.GetItemCountInInventory("potato seed")}");
-            inventoryWheat.SetText($"Wheat seeds: {PlayerStats.Instance.GetItemCountInInventory("wheat seed")}");
+            inventoryPotatoSeed.SetText($"Potato starts: {PlayerStats.Instance.GetItemCountInInventory("potatoSeed")}");
+            inventoryWheatSeed.SetText($"Wheat seeds: {PlayerStats.Instance.GetItemCountInInventory("wheatSeed")}");
         }
     }
 }
