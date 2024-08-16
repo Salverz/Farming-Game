@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Diagnostics;
+using System;
 
 namespace Farming
 {
@@ -93,18 +93,18 @@ namespace Farming
                 return;
             }
 
-            if (_currentHoveredTile is SelectableTile && ((SelectableTile)_currentHoveredTile).Plant == null)
+            SelectableTile hoveredSelectableTile = (SelectableTile)_currentHoveredTile;
+            if (hoveredSelectableTile.Plant == null)
             {
-
                 if (PlayerStats.Instance.RemoveFromInventory(GameGui.Instance.GetSelectedPlant(), 1))
                 {
-                    ((SelectableTile)_currentHoveredTile).Plant = PlantFactory.Instance.CreatePlant(GameGui.Instance.GetSelectedPlant());
+                    hoveredSelectableTile.Plant = PlantFactory.Instance.CreatePlant(GameGui.Instance.GetSelectedPlant());
                 }
             }
-            else if (((SelectableTile)_currentHoveredTile).Plant.IsFullyGrown())
+            else if (hoveredSelectableTile.Plant.IsFullyGrown())
             {
-                PlayerStats.Instance.Money += 50;
-                ((SelectableTile)_currentHoveredTile).Plant = null;
+                PlayerStats.Instance.Money += hoveredSelectableTile.Plant.;
+                hoveredSelectableTile.Plant = null;
             }
         }
     }

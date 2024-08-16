@@ -37,8 +37,8 @@ namespace Farming
 
         public GameGui()
         {
-            Gui gameGui = new Gui("gameGui");
             GuiManager.Instance.RegisterGuiBuilder(this);
+            Gui gameGui = new Gui("gameGui");
             _instance = this;
             _selectedInventoryItem = "";
             _selectedInventorySlot = "";
