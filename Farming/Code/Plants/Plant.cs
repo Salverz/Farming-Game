@@ -5,17 +5,33 @@ namespace Farming
 {
     public abstract class Plant
     {
-        protected int _minTemp;
-        protected int _maxTemp;
-        protected int _idealMinTemp;
-        protected int _idealMaxTemp;
-        protected int _growthStage;
-        protected int _maxGrowthStage;
-        protected int _harvestableGrowthStage;
-        protected int _harvestedTimes;
-        protected float _cropQuality; // 0 to 1
-        protected int _pricePerUnit;
-        protected Texture2D[] _growthStages;
+        private int _minTemp;
+        private int _maxTemp;
+        private int _idealMinTemp;
+        private int _idealMaxTemp;
+        private int _growthStage;
+        private int _maxGrowthStage;
+        private int _harvestableGrowthStage;
+        private int _harvestedTimes;
+        private float _cropQuality; // 0 to 1
+        private int _pricePerUnit;
+        private Texture2D[] _growthStages;
+
+        public Texture2D CurrentGrowthStageTexture
+        {
+            get
+            {
+                return _growthStages[_growthStage];
+            }
+        }
+
+        public int SellPrice
+        {
+            get
+            {
+                return (int)(_pricePerUnit * _cropQuality);
+            }
+        }
 
         public Plant(int minTemp, int maxTemp, int idealMinTemp, int idealMaxTemp, int harvestableGrowthStage, int pricePerUnit, Texture2D[] growthStages)
         {

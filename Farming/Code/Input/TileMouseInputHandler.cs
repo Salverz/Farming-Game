@@ -103,7 +103,7 @@ namespace Farming
             }
             else if (hoveredSelectableTile.Plant.IsFullyGrown())
             {
-                PlayerStats.Instance.Money += hoveredSelectableTile.Plant.;
+                PlayerStats.Instance.Money += hoveredSelectableTile.Plant.SellPrice;
                 hoveredSelectableTile.Plant = null;
             }
         }

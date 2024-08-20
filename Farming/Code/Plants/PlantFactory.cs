@@ -32,6 +32,19 @@ namespace Farming
                     );
             }
 
+            if (name == "potatoSeed")
+            {
+                return new Potato
+                    (
+                     20,
+                     80,
+                     40,
+                     65,
+                     3,
+                     20
+                    );
+            }
+
             throw new KeyNotFoundException($"Plant {name} does not exist");
         }
     }

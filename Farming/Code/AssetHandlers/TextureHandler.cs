@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Farming
 {
@@ -26,20 +25,14 @@ namespace Farming
 
         public TextureHandler()
         {
-            Debug.WriteLine("TextureHandler created!");
             _textures = new Dictionary<string, Texture2D>();
         }
 
         public void LoadTextures(ContentManager content)
         {
-            Debug.WriteLine("Loading textures...");
-            // Tiles
             LoadTileTextures(content);
-
             LoadGuiTextures(content);
-
-            Debug.WriteLine("Textures loaded!");
-            Debug.WriteLine(_textures.ToString());
+            LoadPlantTextures(content);
         }
 
         private void LoadGuiTextures(ContentManager content)
@@ -57,14 +50,23 @@ namespace Farming
             _textures["farmland"] = content.Load<Texture2D>("Textures/Tiles/farmland");
             _textures["wet_farmland"] = content.Load<Texture2D>("Textures/Tiles/farmland_moist");
             _textures["dirt"] = content.Load<Texture2D>("Textures/Tiles/dirt16");
-            _textures["wheat_stage0"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage0");
-            _textures["wheat_stage1"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage1");
-            _textures["wheat_stage2"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage2");
-            _textures["wheat_stage3"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage3");
-            _textures["wheat_stage4"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage4");
-            _textures["wheat_stage5"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage5");
-            _textures["wheat_stage6"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage6");
-            _textures["wheat_stage7"] = content.Load<Texture2D>("Textures/Tiles/wheat_stage7");
+        }
+
+        private void LoadPlantTextures(ContentManager content)
+        {
+            _textures["wheat_stage0"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage0");
+            _textures["wheat_stage1"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage1");
+            _textures["wheat_stage2"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage2");
+            _textures["wheat_stage3"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage3");
+            _textures["wheat_stage4"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage4");
+            _textures["wheat_stage5"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage5");
+            _textures["wheat_stage6"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage6");
+            _textures["wheat_stage7"] = content.Load<Texture2D>("Textures/Plants/Wheat/wheat_stage7");
+
+            _textures["potato_stage0"] = content.Load<Texture2D>("Textures/Plants/Potato/potato_stage0");
+            _textures["potato_stage1"] = content.Load<Texture2D>("Textures/Plants/Potato/potato_stage1");
+            _textures["potato_stage2"] = content.Load<Texture2D>("Textures/Plants/Potato/potato_stage2");
+            _textures["potato_stage3"] = content.Load<Texture2D>("Textures/Plants/Potato/potato_stage3");
             _textures["potato_plant_stage1"] = content.Load<Texture2D>("Textures/Plants/Potato/potato_plant_stage1");
         }
 
